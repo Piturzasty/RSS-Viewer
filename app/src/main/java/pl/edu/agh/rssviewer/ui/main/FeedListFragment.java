@@ -1,6 +1,5 @@
 package pl.edu.agh.rssviewer.ui.main;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.res.Configuration;
 import android.os.Bundle;
@@ -22,7 +21,7 @@ import java.util.Objects;
 import pl.edu.agh.rssviewer.R;
 import pl.edu.agh.rssviewer.adapter.Feed;
 import pl.edu.agh.rssviewer.adapter.FeedAdapter;
-import pl.edu.agh.rssviewer.adapter.RedditFeedDateConverter;
+import pl.edu.agh.rssviewer.adapter.FeedType;
 import pl.edu.agh.rssviewer.listeners.RecyclerItemClickListener;
 import pl.edu.agh.rssviewer.rss.RedditFeedDownloader;
 
@@ -30,17 +29,13 @@ public class FeedListFragment extends Fragment {
 
     private SwipeRefreshLayout swipeRefreshLayout;
 
+    private final static String contentString = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur nec egestas est. Sed quis lacus nibh. Interdum et malesuada fames ac ante ipsum primis in faucibus. Nunc eu pulvinar risus, ac venenatis magna. Morbi tempor ligula ut erat tempus interdum. Donec leo erat, maximus at lorem sed, egestas ultricies diam. Nam mollis mi sed elit pulvinar egestas.";
     private final static List<Feed> data = new ArrayList<Feed>() {{
-//        add(new Feed(
-//                "test 1",
-//                "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur nec egestas est. Sed quis lacus nibh. Interdum et malesuada fames ac ante ipsum primis in faucibus. Nunc eu pulvinar risus, ac venenatis magna. Morbi tempor ligula ut erat tempus interdum. Donec leo erat, maximus at lorem sed, egestas ultricies diam. Nam mollis mi sed elit pulvinar egestas.",
-//                "2020-06-18T11:03:17+00:00",
-//                "Mateusz Pitura",
-//                new RedditFeedDateConverter()));
-        add(new Feed("test 2", "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur nec egestas est. Sed quis lacus nibh. Interdum et malesuada fames ac ante ipsum primis in faucibus. Nunc eu pulvinar risus, ac venenatis magna. Morbi tempor ligula ut erat tempus interdum. Donec leo erat, maximus at lorem sed, egestas ultricies diam. Nam mollis mi sed elit pulvinar egestas.", "2020-06-14T20:07:09Z", "Mateusz Pitura"));
-        add(new Feed("test 3", "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur nec egestas est. Sed quis lacus nibh. Interdum et malesuada fames ac ante ipsum primis in faucibus. Nunc eu pulvinar risus, ac venenatis magna. Morbi tempor ligula ut erat tempus interdum. Donec leo erat, maximus at lorem sed, egestas ultricies diam. Nam mollis mi sed elit pulvinar egestas.", "2020-06-14T20:07:09Z", "Mateusz Pitura"));
-        add(new Feed("test 4", "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur nec egestas est. Sed quis lacus nibh. Interdum et malesuada fames ac ante ipsum primis in faucibus. Nunc eu pulvinar risus, ac venenatis magna. Morbi tempor ligula ut erat tempus interdum. Donec leo erat, maximus at lorem sed, egestas ultricies diam. Nam mollis mi sed elit pulvinar egestas.", "2020-06-14T20:07:09Z", "Mateusz Pitura"));
-        add(new Feed("test 5", "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur nec egestas est. Sed quis lacus nibh. Interdum et malesuada fames ac ante ipsum primis in faucibus. Nunc eu pulvinar risus, ac venenatis magna. Morbi tempor ligula ut erat tempus interdum. Donec leo erat, maximus at lorem sed, egestas ultricies diam. Nam mollis mi sed elit pulvinar egestas.", "2020-06-14T20:07:09Z", "Mateusz Pitura"));
+        add(new Feed("test 1", contentString, "2020-06-18T11:03:17+00:00", "Mateusz Pitura", FeedType.Reddit));
+        add(new Feed("test 2", contentString, "2020-06-14T20:07:09Z", "Mateusz Pitura", FeedType.StackOverflow));
+        add(new Feed("test 3", contentString, "2020-06-14T20:07:09Z", "Mateusz Pitura", FeedType.StackOverflow));
+        add(new Feed("test 4", contentString, "2020-06-14T20:07:09Z", "Mateusz Pitura", FeedType.StackOverflow));
+        add(new Feed("test 5", contentString, "2020-06-14T20:07:09Z", "Mateusz Pitura", FeedType.StackOverflow));
     }};
 
     private OnListFragmentInteractionListener listener;

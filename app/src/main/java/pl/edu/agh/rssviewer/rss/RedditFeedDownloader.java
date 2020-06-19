@@ -8,6 +8,7 @@ import java.util.stream.Collectors;
 
 import pl.edu.agh.rssviewer.adapter.Feed;
 import pl.edu.agh.rssviewer.adapter.FeedAdapter;
+import pl.edu.agh.rssviewer.adapter.FeedType;
 import pl.edu.agh.rssviewer.rss.feed.reddit.RedditEntry;
 import pl.edu.agh.rssviewer.rss.feed.reddit.RedditFeed;
 
@@ -42,8 +43,8 @@ public class RedditFeedDownloader extends FeedDownloader<RedditFeed> {
                             entry.getId(),
                             entry.getContent(),
                             entry.getUpdated(),
-                            entry.getAuthor().getName()))
-//                            new RedditFeedDateConverter()))
+                            entry.getAuthor().getName(),
+                            FeedType.Reddit))
                     .collect(Collectors.toList());
 
             feedAdapter.clear();
