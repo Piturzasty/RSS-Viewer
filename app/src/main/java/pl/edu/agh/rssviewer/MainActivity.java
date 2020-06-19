@@ -1,30 +1,35 @@
 package pl.edu.agh.rssviewer;
 
+import android.content.Intent;
+import android.content.IntentFilter;
+import android.content.res.Configuration;
+import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.view.Menu;
+import android.view.MenuItem;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import androidx.drawerlayout.widget.DrawerLayout;
-import androidx.navigation.NavController;
-import androidx.navigation.Navigation;
-import androidx.navigation.ui.AppBarConfiguration;
-import androidx.navigation.ui.NavigationUI;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.navigation.NavigationView;
-import com.google.android.material.snackbar.Snackbar;
-
-import java.util.List;
+import com.j256.ormlite.stmt.query.In;
 
 import javax.inject.Inject;
 
+import dagger.android.AndroidInjector;
 import dagger.android.support.DaggerAppCompatActivity;
-import pl.edu.agh.rssviewer.persistence.model.Feed;
+import pl.edu.agh.rssviewer.adapter.Feed;
 import pl.edu.agh.rssviewer.persistence.repository.FeedRepository;
+import pl.edu.agh.rssviewer.receiver.NetworkChangedBroadcastReceiver;
+import pl.edu.agh.rssviewer.ui.details.FeedDetailsActivity;
+import pl.edu.agh.rssviewer.ui.details.FeedDetailsFragment;
+import pl.edu.agh.rssviewer.ui.main.FeedListFragment;
+import pl.edu.agh.rssviewer.ui.preferences.PreferencesActivity;
 
-public class MainActivity extends DaggerAppCompatActivity {
-
-    private AppBarConfiguration mAppBarConfiguration;
+public class MainActivity extends DaggerAppCompatActivity implements FeedListFragment.OnListFragmentInteractionListener {
 
     @Inject
     protected FeedRepository feedRepository;
@@ -34,32 +39,24 @@ public class MainActivity extends DaggerAppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        IntentFilter intentFilter = new IntentFilter(WifiManager.WIFI_STATE_CHANGED_ACTION);
+        registerReceiver(new NetworkChangedBroadcastReceiver(getApplicationContext(), findViewById(R.id.linear_layout)), intentFilter);
+
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        FloatingActionButton fab = findViewById(R.id.fab);
-        fab.setOnClickListener(view -> Snackbar.make(view, "It might be a add feed action", Snackbar.LENGTH_LONG)
-                .setAction("Action", null).show());
+        ActionBar ab = getSupportActionBar();
+        assert ab != null;
+        ab.setDisplayHomeAsUpEnabled(false);
 
-        DrawerLayout drawer = findViewById(R.id.drawer_layout);
-        NavigationView navigationView = findViewById(R.id.nav_view);
-
-        mAppBarConfiguration = new AppBarConfiguration.Builder(R.id.nav_home)
-                .setDrawerLayout(drawer)
-                .build();
-
-        NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
-        NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
-        NavigationUI.setupWithNavController(navigationView, navController);
-
-        // feedRepository.create(new Feed("test"));
-
-        Feed fetchedFeed = feedRepository.findById(1L);
-        fetchedFeed.setUrl("changed");
-
-        feedRepository.update(fetchedFeed);
-
-        List<Feed> feeds = feedRepository.findAll();
+//        feedRepository.create(new Feed("test"));
+//
+//        Feed fetchedFeed = feedRepository.findById(1L);
+//        fetchedFeed.setUrl("changed");
+//
+//        feedRepository.update(fetchedFeed);
+//
+//        List<Feed> feeds = feedRepository.findAll();
     }
 
     @Override
@@ -69,8 +66,31 @@ public class MainActivity extends DaggerAppCompatActivity {
     }
 
     @Override
-    public boolean onSupportNavigateUp() {
-        NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
-        return NavigationUI.navigateUp(navController, mAppBarConfiguration) || super.onSupportNavigateUp();
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_favorite:
+                return true;
+            case R.id.action_settings:
+                Intent intent = new Intent(MainActivity.this, PreferencesActivity.class);
+                startActivity(intent);
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
+    @Override
+    public void onListFragmentInteraction(Feed feed) {
+        int orientation = getResources().getConfiguration().orientation;
+        if (orientation == Configuration.ORIENTATION_LANDSCAPE) {
+            FragmentManager fragmentManager = getSupportFragmentManager();
+            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+            fragmentTransaction.replace(R.id.fragment2, FeedDetailsFragment.newInstance(feed));
+            fragmentTransaction.commit();
+        } else {
+            Intent intent = new Intent(MainActivity.this, FeedDetailsActivity.class);
+            intent.putExtra("feed", feed);
+            startActivity(intent);
+        }
     }
 }

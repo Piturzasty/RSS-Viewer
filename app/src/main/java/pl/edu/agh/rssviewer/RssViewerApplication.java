@@ -16,6 +16,7 @@ public class RssViewerApplication extends Application implements HasAndroidInjec
     @Override
     public void onCreate() {
         super.onCreate();
+
         DaggerApplicationComponent.builder()
                 .application(this)
                 .build()

@@ -1,6 +1,6 @@
 package pl.edu.agh.rssviewer.rss;
 
-import pl.edu.agh.rssviewer.rss.feed.StackOverflowFeed;
+import pl.edu.agh.rssviewer.rss.feed.stackoverflow.StackOverflowFeed;
 
 public class StackOverflowFeedDownloader extends FeedDownloader<StackOverflowFeed> {
 

@@ -1,4 +1,4 @@
-package pl.edu.agh.rssviewer.ui.home;
+package pl.edu.agh.rssviewer.ui.main;
 
 import android.os.Handler;
 
@@ -8,10 +8,9 @@ import androidx.lifecycle.ViewModel;
 
 import java.util.concurrent.ExecutionException;
 
-import pl.edu.agh.rssviewer.rss.RedditFeedDownloader;
 import pl.edu.agh.rssviewer.rss.StackOverflowFeedDownloader;
-import pl.edu.agh.rssviewer.rss.feed.RedditFeed;
-import pl.edu.agh.rssviewer.rss.feed.StackOverflowFeed;
+import pl.edu.agh.rssviewer.rss.feed.reddit.RedditFeed;
+import pl.edu.agh.rssviewer.rss.feed.stackoverflow.StackOverflowFeed;
 
 public class HomeViewModel extends ViewModel {
     private MutableLiveData<String> string;
@@ -28,8 +27,8 @@ public class HomeViewModel extends ViewModel {
         RedditFeed redditFeed;
         StackOverflowFeed stackOverflowFeed;
         try {
-            RedditFeedDownloader feedDownloader = new RedditFeedDownloader();
-            redditFeed = feedDownloader.execute("https://www.reddit.com/r/WTF/.rss").get();
+//            RedditFeedDownloader feedDownloader = new RedditFeedDownloader();
+//            redditFeed = feedDownloader.execute("https://www.reddit.com/r/WTF/.rss").get();
             StackOverflowFeedDownloader feedDownloader2 = new StackOverflowFeedDownloader();
             stackOverflowFeed = feedDownloader2.execute("https://stackoverflow.com/feeds/").get();
         } catch (ExecutionException | InterruptedException e) {
