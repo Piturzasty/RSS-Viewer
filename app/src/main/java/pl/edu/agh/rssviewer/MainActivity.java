@@ -10,16 +10,12 @@ import android.view.MenuItem;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
-import com.j256.ormlite.stmt.query.In;
-
 import javax.inject.Inject;
 
-import dagger.android.AndroidInjector;
 import dagger.android.support.DaggerAppCompatActivity;
 import pl.edu.agh.rssviewer.adapter.Feed;
 import pl.edu.agh.rssviewer.persistence.repository.FeedRepository;
@@ -48,15 +44,6 @@ public class MainActivity extends DaggerAppCompatActivity implements FeedListFra
         ActionBar ab = getSupportActionBar();
         assert ab != null;
         ab.setDisplayHomeAsUpEnabled(false);
-
-//        feedRepository.create(new Feed("test"));
-//
-//        Feed fetchedFeed = feedRepository.findById(1L);
-//        fetchedFeed.setUrl("changed");
-//
-//        feedRepository.update(fetchedFeed);
-//
-//        List<Feed> feeds = feedRepository.findAll();
     }
 
     @Override
