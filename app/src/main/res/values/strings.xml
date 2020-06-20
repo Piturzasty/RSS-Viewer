@@ -1,6 +1,7 @@
 <resources>
     <string name="app_name">RSS Viewer</string>
     <string name="read_more">Read more</string>
-    <string name="action_favorite">Favorites</string>
+    <string name="action_feeds">Manage feeds</string>
     <string name="action_settings">Settings</string>
+    <string name="title_activity_management">ManagementActivity</string>
 </resources>

@@ -19,11 +19,10 @@ import java.util.List;
 import java.util.Objects;
 
 import pl.edu.agh.rssviewer.R;
-import pl.edu.agh.rssviewer.adapter.Feed;
 import pl.edu.agh.rssviewer.adapter.FeedAdapter;
 import pl.edu.agh.rssviewer.listeners.RecyclerItemClickListener;
+import pl.edu.agh.rssviewer.rss.Feed;
 import pl.edu.agh.rssviewer.rss.RedditFeedDownloader;
-import pl.edu.agh.rssviewer.rss.StackOverflowFeedDownloader;
 
 public class FeedListFragment extends Fragment {
 
