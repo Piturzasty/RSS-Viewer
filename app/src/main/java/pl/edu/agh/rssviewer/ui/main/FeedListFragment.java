@@ -59,9 +59,7 @@ public class FeedListFragment extends DaggerFragment {
 
         swipeRefreshLayout = view.findViewById(R.id.swipe_refresh);
 
-        if (savedInstanceState == null) {
-            new FeedDownloaderTask(feedAdapter, swipeRefreshLayout, feedRepository, feedSourceRepository).execute();
-        }
+        new FeedDownloaderTask(feedAdapter, swipeRefreshLayout, feedRepository, feedSourceRepository).execute();
 
         swipeRefreshLayout.setOnRefreshListener(() -> new RedditFeedDownloader(feedAdapter, swipeRefreshLayout, feedRepository).execute("https://www.reddit.com/r/WTF/.rss"));
         swipeRefreshLayout.setColorSchemeResources(android.R.color.holo_red_light, android.R.color.holo_green_light, android.R.color.holo_orange_light, android.R.color.holo_red_light);
