@@ -9,6 +9,7 @@ import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.widget.Toolbar;
 
 import dagger.android.support.DaggerAppCompatActivity;
+import pl.edu.agh.rssviewer.ui.management.ManagementActivity;
 import pl.edu.agh.rssviewer.ui.preferences.PreferencesActivity;
 
 public abstract class ActivityBase extends DaggerAppCompatActivity {

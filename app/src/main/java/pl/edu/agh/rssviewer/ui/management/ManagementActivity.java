@@ -1,9 +1,12 @@
-package pl.edu.agh.rssviewer;
+package pl.edu.agh.rssviewer.ui.management;
 
 import android.os.Bundle;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
+
+import pl.edu.agh.rssviewer.ActivityBase;
+import pl.edu.agh.rssviewer.R;
 
 public class ManagementActivity extends ActivityBase {
 

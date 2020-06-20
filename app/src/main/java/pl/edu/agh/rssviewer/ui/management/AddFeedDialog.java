@@ -1,4 +1,4 @@
-package pl.edu.agh.rssviewer;
+package pl.edu.agh.rssviewer.ui.management;
 
 import android.app.Dialog;
 import android.os.Bundle;
@@ -9,6 +9,8 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.FragmentActivity;
+
+import pl.edu.agh.rssviewer.R;
 
 public class AddFeedDialog extends DialogFragment {
 
