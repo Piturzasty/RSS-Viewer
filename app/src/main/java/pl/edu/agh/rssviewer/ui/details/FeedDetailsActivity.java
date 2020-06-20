@@ -6,7 +6,7 @@ import androidx.appcompat.app.ActionBar;
 
 import pl.edu.agh.rssviewer.ActivityBase;
 import pl.edu.agh.rssviewer.R;
-import pl.edu.agh.rssviewer.rss.Feed;
+import pl.edu.agh.rssviewer.persistence.model.Feed;
 
 public class FeedDetailsActivity extends ActivityBase {
 

@@ -27,7 +27,9 @@ public abstract class ActivityBase extends DaggerAppCompatActivity {
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_feeds:
-                startActivity(new Intent(this, ManagementActivity.class));
+                if (!(this instanceof ManagementActivity)) {
+                    startActivity(new Intent(this, ManagementActivity.class));
+                }
                 return true;
             case R.id.action_settings:
                 startActivity(new Intent(this, PreferencesActivity.class));

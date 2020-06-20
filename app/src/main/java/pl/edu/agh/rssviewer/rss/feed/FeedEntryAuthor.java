@@ -1,21 +1,16 @@
-package pl.edu.agh.rssviewer.rss.feed.reddit;
+package pl.edu.agh.rssviewer.rss.feed;
 
 import org.simpleframework.xml.Element;
 import org.simpleframework.xml.Root;
 
 @Root(name = "author", strict = false)
-public class RedditFeedAuthor {
+public class FeedEntryAuthor {
     @Element
     private String name;
     @Element
     private String uri;
 
-    public RedditFeedAuthor() {}
-
-    public RedditFeedAuthor(String name, String uri) {
-        this.name = name;
-        this.uri = uri;
-    }
+    public FeedEntryAuthor() {}
 
     public String getName() {
         return name;

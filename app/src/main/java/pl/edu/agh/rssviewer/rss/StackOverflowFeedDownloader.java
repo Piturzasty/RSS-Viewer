@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import pl.edu.agh.rssviewer.adapter.FeedAdapter;
+import pl.edu.agh.rssviewer.persistence.model.Feed;
 import pl.edu.agh.rssviewer.rss.feed.stackoverflow.StackOverflowEntry;
 import pl.edu.agh.rssviewer.rss.feed.stackoverflow.StackOverflowFeed;
 
@@ -38,11 +39,11 @@ public class StackOverflowFeedDownloader extends FeedDownloader<StackOverflowFee
                     .getEntries()
                     .stream()
                     .map((StackOverflowEntry entry) -> new Feed(
-                            entry.getTitle(),
-                            entry.getSummary(),
-                            entry.getUpdated(),
-                            entry.getAuthor().getName(),
                             entry.getLink().getHref(),
+                            entry.getTitle(),
+                            entry.getUpdated(),
+                            entry.getSummary(),
+                            entry.getAuthor().getName(),
                             FeedType.StackOverflow))
                     .collect(Collectors.toList());
 

@@ -11,6 +11,7 @@ import dagger.Module;
 import dagger.Provides;
 import pl.edu.agh.rssviewer.persistence.DatabaseHelper;
 import pl.edu.agh.rssviewer.persistence.repository.FeedRepository;
+import pl.edu.agh.rssviewer.persistence.repository.FeedSourceRepository;
 
 @Module
 class DatabaseModule {
@@ -23,6 +24,17 @@ class DatabaseModule {
     FeedRepository providesFeedRepository(ConnectionSource connectionSource) {
         try {
             return new FeedRepository(connectionSource);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return null;
+    }
+
+    @Provides
+    FeedSourceRepository providesFeedSourceRepository(ConnectionSource connectionSource) {
+        try {
+            return new FeedSourceRepository(connectionSource);
         } catch (SQLException e) {
             e.printStackTrace();
         }

@@ -1,18 +1,18 @@
-package pl.edu.agh.rssviewer.rss.feed.stackoverflow;
+package pl.edu.agh.rssviewer.rss.feed;
 
 import org.simpleframework.xml.Attribute;
 import org.simpleframework.xml.Root;
 
 @Root(name = "link", strict = false)
-public class StackOverflowFeedLink {
-    @Attribute
+public class FeedLink {
+    @Attribute(required = false)
     private String rel;
     @Attribute
     private String href;
 
-    public StackOverflowFeedLink() {}
+    public FeedLink() {}
 
-    public StackOverflowFeedLink(String rel, String href) {
+    public FeedLink(String rel, String href) {
         this.rel = rel;
         this.href = href;
     }

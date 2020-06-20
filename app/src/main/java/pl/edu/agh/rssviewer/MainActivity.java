@@ -12,9 +12,9 @@ import androidx.fragment.app.FragmentTransaction;
 
 import javax.inject.Inject;
 
+import pl.edu.agh.rssviewer.persistence.model.Feed;
 import pl.edu.agh.rssviewer.persistence.repository.FeedRepository;
 import pl.edu.agh.rssviewer.receiver.NetworkChangedBroadcastReceiver;
-import pl.edu.agh.rssviewer.rss.Feed;
 import pl.edu.agh.rssviewer.ui.details.FeedDetailsActivity;
 import pl.edu.agh.rssviewer.ui.details.FeedDetailsFragment;
 import pl.edu.agh.rssviewer.ui.main.FeedListFragment;

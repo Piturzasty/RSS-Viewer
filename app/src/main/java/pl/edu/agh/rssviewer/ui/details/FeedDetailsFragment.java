@@ -13,12 +13,11 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 
 import pl.edu.agh.rssviewer.R;
-import pl.edu.agh.rssviewer.rss.Feed;
 import pl.edu.agh.rssviewer.background.IconDownloaderTask;
+import pl.edu.agh.rssviewer.persistence.model.Feed;
 import pl.edu.agh.rssviewer.service.html.FeedParser;
 
 public class FeedDetailsFragment extends Fragment {
@@ -27,7 +26,6 @@ public class FeedDetailsFragment extends Fragment {
     private TextView additionalInfoTextView;
     private TextView contentTextView;
 
-    private ConstraintLayout imageContainerConstraintLayout;
     private ImageView imageImageView;
 
     public FeedDetailsFragment() {
@@ -49,8 +47,6 @@ public class FeedDetailsFragment extends Fragment {
         titleTextView = view.findViewById(R.id.details_title);
         additionalInfoTextView = view.findViewById(R.id.details_additional_info);
         contentTextView = view.findViewById(R.id.details_full_content);
-
-        imageContainerConstraintLayout = view.findViewById(R.id.details_image_view_2_container);
         imageImageView = view.findViewById(R.id.details_image_view_2);
 
         Button readMoreButton = view.findViewById(R.id.details_button_more);
@@ -74,12 +70,12 @@ public class FeedDetailsFragment extends Fragment {
     }
 
     private void onReadMoreClick(Feed feed) {
-        startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(feed.getLink())));
+        startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(feed.getUrl())));
     }
 
     private void fillViewWithData(View view, int orientation, Feed feed) {
         iconImageView.setImageDrawable(null);
-        new IconDownloaderTask(iconImageView).execute(feed.getFeedType());
+        new IconDownloaderTask(iconImageView).execute(feed.getType());
 
         if (orientation != Configuration.ORIENTATION_PORTRAIT) {
             titleTextView.setText(feed.getTitle());

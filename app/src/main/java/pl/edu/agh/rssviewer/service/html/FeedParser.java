@@ -14,7 +14,7 @@ import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
 
 import pl.edu.agh.rssviewer.background.ImageDownloaderTask;
-import pl.edu.agh.rssviewer.rss.Feed;
+import pl.edu.agh.rssviewer.persistence.model.Feed;
 
 public class FeedParser {
     private final String imageText = "Image";
@@ -47,7 +47,7 @@ public class FeedParser {
 
     public void parseContent(Feed feed) {
         Document document = Jsoup.parse(feed.getContent());
-        switch (feed.getFeedType()) {
+        switch (feed.getType()) {
             case Reddit: {
                 parseRedditFeedContent(feed, document);
                 break;

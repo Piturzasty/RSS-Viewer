@@ -8,7 +8,6 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
-import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -18,19 +17,31 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+import javax.inject.Inject;
+
+import dagger.android.support.DaggerFragment;
 import pl.edu.agh.rssviewer.R;
 import pl.edu.agh.rssviewer.adapter.FeedAdapter;
+import pl.edu.agh.rssviewer.background.FeedDownloaderTask;
 import pl.edu.agh.rssviewer.listeners.RecyclerItemClickListener;
-import pl.edu.agh.rssviewer.rss.Feed;
+import pl.edu.agh.rssviewer.persistence.model.Feed;
+import pl.edu.agh.rssviewer.persistence.repository.FeedRepository;
+import pl.edu.agh.rssviewer.persistence.repository.FeedSourceRepository;
 import pl.edu.agh.rssviewer.rss.RedditFeedDownloader;
 
-public class FeedListFragment extends Fragment {
+public class FeedListFragment extends DaggerFragment {
 
     private SwipeRefreshLayout swipeRefreshLayout;
 
     private final static List<Feed> data = new ArrayList<>();
 
     private OnListFragmentInteractionListener listener;
+
+    @Inject
+    FeedSourceRepository feedSourceRepository;
+
+    @Inject
+    FeedRepository feedRepository;
 
     public FeedListFragment() {
     }
@@ -44,9 +55,22 @@ public class FeedListFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.feed_list, container, false);
 
+        final FeedAdapter feedAdapter = setupRecyclerView(view);
+
+        swipeRefreshLayout = view.findViewById(R.id.swipe_refresh);
+
+        new FeedDownloaderTask(feedAdapter, swipeRefreshLayout, feedRepository, feedSourceRepository).execute();
+
+        swipeRefreshLayout.setOnRefreshListener(() -> new RedditFeedDownloader(feedAdapter, swipeRefreshLayout).execute("https://www.reddit.com/r/WTF/.rss"));
+        swipeRefreshLayout.setColorSchemeResources(android.R.color.holo_red_light, android.R.color.holo_green_light, android.R.color.holo_orange_light, android.R.color.holo_red_light);
+
+        return view;
+    }
+
+    private FeedAdapter setupRecyclerView(View view) {
         Context context = view.getContext();
         final RecyclerView recyclerView = view.findViewById(R.id.feed_list);
-        LinearLayoutManager layoutManager = new LinearLayoutManager(this.getContext());
+        LinearLayoutManager layoutManager = new LinearLayoutManager(context);
         recyclerView.setLayoutManager(new LinearLayoutManager(context));
 
         final FeedAdapter feedAdapter = new FeedAdapter(data);
@@ -73,16 +97,7 @@ public class FeedListFragment extends Fragment {
             public void onLongItemClick(View view, int position, Context context) {
             }
         }));
-
-//        new RedditFeedDownloader(feedAdapter, swipeRefreshLayout).execute("https://www.reddit.com/r/beta/.rss");
-
-        new StackOverflowFeedDownloader(feedAdapter, swipeRefreshLayout).execute("https://stackoverflow.com/feeds/");
-
-        swipeRefreshLayout = view.findViewById(R.id.swipe_refresh);
-        swipeRefreshLayout.setOnRefreshListener(() -> new RedditFeedDownloader(feedAdapter, swipeRefreshLayout).execute("https://www.reddit.com/r/WTF/.rss"));
-        swipeRefreshLayout.setColorSchemeResources(android.R.color.holo_red_light, android.R.color.holo_green_light, android.R.color.holo_orange_light, android.R.color.holo_red_light);
-
-        return view;
+        return feedAdapter;
     }
 
     @Override

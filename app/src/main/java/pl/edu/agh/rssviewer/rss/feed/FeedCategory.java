@@ -1,16 +1,16 @@
-package pl.edu.agh.rssviewer.rss.feed.reddit;
+package pl.edu.agh.rssviewer.rss.feed;
 
 import org.simpleframework.xml.Attribute;
 import org.simpleframework.xml.Root;
 
 @Root(name = "category", strict = false)
-public class RedditFeedCategory {
+public class FeedCategory {
     @Attribute
     private String term;
 
-    public RedditFeedCategory() {}
+    public FeedCategory() {}
 
-    public RedditFeedCategory(String term) {
+    public FeedCategory(String term) {
         this.term = term;
     }
 

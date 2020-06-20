@@ -29,13 +29,13 @@ public class AddFeedDialog extends DialogFragment {
         final EditText editText = view.findViewById(R.id.feed_url);
         AlertDialog.Builder builder = new AlertDialog.Builder(a);
         builder.setView(view)
-                .setMessage("test")
                 .setPositiveButton("Add", (dialog, id) -> {
                     if (listener != null) {
                         listener.onAddButtonClick(editText.getText().toString());
                     }
                 })
-                .setNegativeButton("Cancel", (dialog, id) -> {});
+                .setNegativeButton("Cancel", (dialog, id) -> {
+                });
         return builder.create();
     }
 

@@ -13,9 +13,9 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.List;
 
-import pl.edu.agh.rssviewer.background.IconDownloaderTask;
 import pl.edu.agh.rssviewer.R;
-import pl.edu.agh.rssviewer.rss.Feed;
+import pl.edu.agh.rssviewer.background.IconDownloaderTask;
+import pl.edu.agh.rssviewer.persistence.model.Feed;
 import pl.edu.agh.rssviewer.service.html.FeedParser;
 
 public class FeedAdapter extends RecyclerView.Adapter<FeedAdapter.FeedViewHolder> {
@@ -63,7 +63,7 @@ public class FeedAdapter extends RecyclerView.Adapter<FeedAdapter.FeedViewHolder
         Feed feed = data.get(position);
 
         holder.iconImageView.setImageDrawable(null);
-        new IconDownloaderTask(holder.iconImageView).execute(feed.getFeedType());
+        new IconDownloaderTask(holder.iconImageView).execute(feed.getType());
 
         holder.titleTextView.setText(feed.getTitle());
         holder.dateTextView.setText(feed.getFormattedDate(context));
