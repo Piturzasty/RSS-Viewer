@@ -44,6 +44,7 @@ public class RedditFeedDownloader extends FeedDownloader<RedditFeed> {
                             entry.getContent(),
                             entry.getUpdated(),
                             entry.getAuthor().getName(),
+                            entry.getLink().getHref(),
                             FeedType.Reddit))
                     .collect(Collectors.toList());
 

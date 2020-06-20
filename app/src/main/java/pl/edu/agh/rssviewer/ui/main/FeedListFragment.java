@@ -21,22 +21,15 @@ import java.util.Objects;
 import pl.edu.agh.rssviewer.R;
 import pl.edu.agh.rssviewer.adapter.Feed;
 import pl.edu.agh.rssviewer.adapter.FeedAdapter;
-import pl.edu.agh.rssviewer.adapter.FeedType;
 import pl.edu.agh.rssviewer.listeners.RecyclerItemClickListener;
 import pl.edu.agh.rssviewer.rss.RedditFeedDownloader;
+import pl.edu.agh.rssviewer.rss.StackOverflowFeedDownloader;
 
 public class FeedListFragment extends Fragment {
 
     private SwipeRefreshLayout swipeRefreshLayout;
 
-    private final static String contentString = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur nec egestas est. Sed quis lacus nibh. Interdum et malesuada fames ac ante ipsum primis in faucibus. Nunc eu pulvinar risus, ac venenatis magna. Morbi tempor ligula ut erat tempus interdum. Donec leo erat, maximus at lorem sed, egestas ultricies diam. Nam mollis mi sed elit pulvinar egestas.";
-    private final static List<Feed> data = new ArrayList<Feed>() {{
-        add(new Feed("test 1", contentString, "2020-06-18T11:03:17+00:00", "Mateusz Pitura", FeedType.Reddit));
-        add(new Feed("test 2", contentString, "2020-06-14T20:07:09Z", "Mateusz Pitura", FeedType.StackOverflow));
-        add(new Feed("test 3", contentString, "2020-06-14T20:07:09Z", "Mateusz Pitura", FeedType.StackOverflow));
-        add(new Feed("test 4", contentString, "2020-06-14T20:07:09Z", "Mateusz Pitura", FeedType.StackOverflow));
-        add(new Feed("test 5", contentString, "2020-06-14T20:07:09Z", "Mateusz Pitura", FeedType.StackOverflow));
-    }};
+    private final static List<Feed> data = new ArrayList<>();
 
     private OnListFragmentInteractionListener listener;
 
@@ -82,7 +75,9 @@ public class FeedListFragment extends Fragment {
             }
         }));
 
-        new RedditFeedDownloader(feedAdapter, swipeRefreshLayout).execute("https://www.reddit.com/r/beta/.rss");
+//        new RedditFeedDownloader(feedAdapter, swipeRefreshLayout).execute("https://www.reddit.com/r/beta/.rss");
+
+        new StackOverflowFeedDownloader(feedAdapter, swipeRefreshLayout).execute("https://stackoverflow.com/feeds/");
 
         swipeRefreshLayout = view.findViewById(R.id.swipe_refresh);
         swipeRefreshLayout.setOnRefreshListener(() -> new RedditFeedDownloader(feedAdapter, swipeRefreshLayout).execute("https://www.reddit.com/r/WTF/.rss"));

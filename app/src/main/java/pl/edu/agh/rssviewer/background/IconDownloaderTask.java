@@ -13,7 +13,9 @@ import java.lang.ref.WeakReference;
 import java.net.URL;
 import java.net.URLConnection;
 
-public class IconDownloaderTask extends AsyncTask<String, Void, Bitmap> {
+import pl.edu.agh.rssviewer.adapter.FeedType;
+
+public class IconDownloaderTask extends AsyncTask<FeedType, Void, Bitmap> {
     private final WeakReference<ImageView> imageViewReference;
 
     public IconDownloaderTask(ImageView imageView) {
@@ -21,7 +23,10 @@ public class IconDownloaderTask extends AsyncTask<String, Void, Bitmap> {
     }
 
     @Override
-    protected Bitmap doInBackground(String... params) {
+    protected Bitmap doInBackground(FeedType... params) {
+        if (params.length != 1) {
+            return null;
+        }
         return downloadBitmap(params[0]);
     }
 
@@ -41,8 +46,8 @@ public class IconDownloaderTask extends AsyncTask<String, Void, Bitmap> {
         }
     }
 
-    private Bitmap downloadBitmap(String url) {
-        final Uri iconUri = Uri.parse(url).buildUpon().path("favicon.ico").build();
+    private Bitmap downloadBitmap(FeedType feedType) {
+        final Uri iconUri = getUrlFromFeed(feedType).buildUpon().path("favicon.ico").build();
 
         try
         {
@@ -54,5 +59,15 @@ public class IconDownloaderTask extends AsyncTask<String, Void, Bitmap> {
         } catch (IOException e) {
             return null;
         }
+    }
+
+    private Uri getUrlFromFeed(FeedType feedType) {
+        switch (feedType){
+            case Reddit:
+                return Uri.parse("https://www.reddit.com/");
+            case StackOverflow:
+                return Uri.parse("https://stackoverflow.com/");
+        }
+        return Uri.parse("https://www.agh.edu.pl/");
     }
 }

@@ -9,13 +9,15 @@ public class Feed implements Serializable {
     private String content;
     private String date;
     private String author;
+    private String link;
     private FeedType feedType;
 
-    public Feed(String title, String content, String date, String author, FeedType feedType) {
+    public Feed(String title, String content, String date, String author, String link, FeedType feedType) {
         this.title = title;
         this.content = content;
         this.date = date;
         this.author = author;
+        this.link = link;
         this.feedType = feedType;
     }
 
@@ -53,6 +55,14 @@ public class Feed implements Serializable {
 
     public void setAuthor(String author) {
         this.author = author;
+    }
+
+    public String getLink() {
+        return link;
+    }
+
+    public void setLink(String link) {
+        this.link = link;
     }
 
     public FeedType getFeedType() {

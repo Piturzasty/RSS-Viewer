@@ -58,7 +58,8 @@ public class FeedAdapter extends RecyclerView.Adapter<FeedAdapter.FeedViewHolder
     public void onBindViewHolder(FeedViewHolder holder, final int position) {
         Feed feed = data.get(position);
 
-        new IconDownloaderTask(holder.imageView).execute("https://www.reddit.com/");
+        holder.imageView.setImageDrawable(null);
+        new IconDownloaderTask(holder.imageView).execute(feed.getFeedType());
 
         holder.titleTextView.setText(feed.getTitle());
         holder.dateTextView.setText(feed.getFormattedDate(context));
