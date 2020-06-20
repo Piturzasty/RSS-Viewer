@@ -7,7 +7,7 @@ import java.util.Collections;
 import java.util.List;
 
 public abstract class SqLiteRepository<T, I> implements Repository<T, I> {
-    private Dao<T, I> dao;
+    protected Dao<T, I> dao;
 
     protected SqLiteRepository(Dao<T, I> dao) {
         this.dao = dao;

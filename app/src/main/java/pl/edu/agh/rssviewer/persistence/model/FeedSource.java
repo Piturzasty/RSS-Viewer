@@ -13,12 +13,17 @@ public class FeedSource {
     @DatabaseField(canBeNull = false)
     private String url;
     @DatabaseField(canBeNull = false)
+    private String category;
+    @DatabaseField(canBeNull = false)
     private FeedType type;
+
+    private int feedCount;
 
     public FeedSource() {}
 
-    public FeedSource(String url, FeedType type) {
+    public FeedSource(String url, String category, FeedType type) {
         this.url = url;
+        this.category = category;
         this.type = type;
     }
 
@@ -38,11 +43,27 @@ public class FeedSource {
         this.url = url;
     }
 
+    public String getCategory() {
+        return category;
+    }
+
+    public void setCategory(String category) {
+        this.category = category;
+    }
+
     public FeedType getType() {
         return type;
     }
 
     public void setType(FeedType type) {
         this.type = type;
+    }
+
+    public int getFeedCount() {
+        return feedCount;
+    }
+
+    public void setFeedCount(int feedCount) {
+        this.feedCount = feedCount;
     }
 }

@@ -13,8 +13,12 @@ import pl.edu.agh.rssviewer.service.date.FeedDateFormatter;
 
 @DatabaseTable(tableName = "feeds", daoClass = FeedDaoImpl.class)
 public class Feed implements Serializable {
+    public static final String CATEGORY_NAME = "category";
+
     @DatabaseField(generatedId = true)
     private long id;
+    @DatabaseField(canBeNull = false)
+    private String externalId;
     @DatabaseField(canBeNull = false)
     private String url;
     @DatabaseField(canBeNull = false)
@@ -26,17 +30,21 @@ public class Feed implements Serializable {
     @DatabaseField(canBeNull = false)
     private String author;
     @DatabaseField(canBeNull = false)
+    private String category;
+    @DatabaseField(canBeNull = false)
     private FeedType type;
 
     public Feed() {
     }
 
-    public Feed(String url, String title, String date, String content, String author, FeedType type) {
+    public Feed(String externalId, String url, String title, String date, String content, String author, String category, FeedType type) {
+        this.externalId = externalId;
         this.url = url;
         this.title = title;
         this.date = date;
         this.content = content;
         this.author = author;
+        this.category = category;
         this.type = type;
     }
 
@@ -50,6 +58,14 @@ public class Feed implements Serializable {
 
     public void setId(long id) {
         this.id = id;
+    }
+
+    public String getExternalId() {
+        return externalId;
+    }
+
+    public void setExternalId(String externalId) {
+        this.externalId = externalId;
     }
 
     public String getUrl() {
@@ -90,6 +106,14 @@ public class Feed implements Serializable {
 
     public void setAuthor(String author) {
         this.author = author;
+    }
+
+    public String getCategory() {
+        return category;
+    }
+
+    public void setCategory(String category) {
+        this.category = category;
     }
 
     public FeedType getType() {

@@ -74,7 +74,7 @@ public class FeedSourceAdapter extends RecyclerView.Adapter<FeedSourceAdapter.Fe
         holder.titleTextView.setText(feed.getUrl());
         holder.typeTextView.setText(feedType.toString());
         holder.removeButton.setOnClickListener(view -> {});
-        holder.countTextView.setText(String.valueOf(20));
+        holder.countTextView.setText(String.valueOf(feed.getFeedCount()));
     }
 
     @Override

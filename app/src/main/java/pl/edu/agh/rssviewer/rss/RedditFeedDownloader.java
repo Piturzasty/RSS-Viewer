@@ -8,16 +8,19 @@ import java.util.stream.Collectors;
 
 import pl.edu.agh.rssviewer.adapter.FeedAdapter;
 import pl.edu.agh.rssviewer.persistence.model.Feed;
+import pl.edu.agh.rssviewer.persistence.repository.FeedRepository;
 import pl.edu.agh.rssviewer.rss.feed.reddit.RedditEntry;
 import pl.edu.agh.rssviewer.rss.feed.reddit.RedditFeed;
 
 public class RedditFeedDownloader extends FeedDownloader<RedditFeed> {
     private WeakReference<FeedAdapter> feedAdapterWeakReference;
     private WeakReference<SwipeRefreshLayout> swipeRefreshLayoutWeakReference;
+    private FeedRepository feedRepository;
 
-    public RedditFeedDownloader(FeedAdapter feedAdapter, SwipeRefreshLayout swipeRefreshLayout) {
+    public RedditFeedDownloader(FeedAdapter feedAdapter, SwipeRefreshLayout swipeRefreshLayout, FeedRepository feedRepository) {
         feedAdapterWeakReference = new WeakReference<>(feedAdapter);
         swipeRefreshLayoutWeakReference = new WeakReference<>(swipeRefreshLayout);
+        this.feedRepository = feedRepository;
     }
 
     @Override
@@ -30,30 +33,43 @@ public class RedditFeedDownloader extends FeedDownloader<RedditFeed> {
 
     @Override
     protected void onPostExecute(RedditFeed redditFeed) {
-        super.onPostExecute(redditFeed);
-
         FeedAdapter feedAdapter = feedAdapterWeakReference.get();
-
         if (redditFeed != null && feedAdapter != null) {
             List<Feed> feeds = redditFeed
                     .getEntries()
                     .stream()
                     .map((RedditEntry entry) -> new Feed(
+                            entry.getId(),
                             entry.getLink().getHref(),
                             entry.getTitle(),
                             entry.getUpdated(),
                             entry.getContent(),
                             entry.getAuthor().getName(),
+                            redditFeed.getCategory().getTerm(),
                             FeedType.Reddit))
                     .collect(Collectors.toList());
 
-            feedAdapter.addAll(feeds);
+            combineWithDbAndAdd(redditFeed, feedAdapter, feeds);
         }
 
         SwipeRefreshLayout swipeRefreshLayout = swipeRefreshLayoutWeakReference.get();
         if (swipeRefreshLayout != null) {
             swipeRefreshLayout.setRefreshing(false);
         }
+    }
+
+    private void combineWithDbAndAdd(RedditFeed redditFeed, FeedAdapter feedAdapter, List<Feed> feeds) {
+        List<Feed> dbFeeds = feedRepository.findByCategory(redditFeed.getCategory().getTerm());
+        List<String> externalIds = dbFeeds.stream().map(Feed::getExternalId).collect(Collectors.toList());
+
+        List<Feed> notExistingInDb = feeds.stream().filter(f -> !externalIds.contains(f.getExternalId())).collect(Collectors.toList());
+        if (notExistingInDb.size() > 0) {
+            notExistingInDb.forEach(f -> feedRepository.create(f));
+        }
+
+        dbFeeds.addAll(notExistingInDb);
+
+        feedAdapter.addAll(dbFeeds);
     }
 }
 

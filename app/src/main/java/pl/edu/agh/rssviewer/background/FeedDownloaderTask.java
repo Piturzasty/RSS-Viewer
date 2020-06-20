@@ -36,12 +36,16 @@ public class FeedDownloaderTask extends AsyncTask<Void, Void, List<FeedSource>> 
     protected void onPostExecute(List<FeedSource> feedSources) {
         FeedAdapter feedAdapter = feedAdapterWeakReference.get();
         SwipeRefreshLayout swipeRefreshLayout = swipeRefreshLayoutWeakReference.get();
-        for (FeedSource feedSource : feedSources) {
-            switch (feedSource.getType()) {
-                case Reddit:
-                    new RedditFeedDownloader(feedAdapter, swipeRefreshLayout).execute(feedSource.getUrl());
-                case StackOverflow:
-                    new StackOverflowFeedDownloader(feedAdapter, swipeRefreshLayout).execute(feedSource.getUrl());
+
+        if (feedAdapter != null && swipeRefreshLayout != null) {
+            feedAdapter.clear();
+            for (FeedSource feedSource : feedSources) {
+                switch (feedSource.getType()) {
+                    case Reddit:
+                        new RedditFeedDownloader(feedAdapter, swipeRefreshLayout, feedRepository).execute(feedSource.getUrl());
+                    case StackOverflow:
+                        new StackOverflowFeedDownloader(feedAdapter, swipeRefreshLayout, feedRepository).execute(feedSource.getUrl());
+                }
             }
         }
     }
