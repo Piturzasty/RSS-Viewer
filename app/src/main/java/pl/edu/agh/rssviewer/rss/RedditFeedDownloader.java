@@ -47,7 +47,6 @@ public class RedditFeedDownloader extends FeedDownloader<RedditFeed> {
                             FeedType.Reddit))
                     .collect(Collectors.toList());
 
-            feedAdapter.clear();
             feedAdapter.addAll(feeds);
         }
 

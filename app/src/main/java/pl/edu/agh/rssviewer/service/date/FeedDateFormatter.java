@@ -15,8 +15,12 @@ public class FeedDateFormatter {
         final DateFormat dateFormat = android.text.format.DateFormat.getLongDateFormat(context);
         final DateFormat timeFormat = android.text.format.DateFormat.getTimeFormat(context);
 
-        Date date = getFeedDateConverter(feedType).convertToUtc(dateString);
+        Date date = getDate(dateString, feedType);
         return timeFormat.format(date) + ", " + dateFormat.format(date);
+    }
+
+    public static Date getDate(String dateString, FeedType feedType) {
+        return getFeedDateConverter(feedType).convertToUtc(dateString);
     }
 
     private static IFeedDateConverter getFeedDateConverter(FeedType feedType) {

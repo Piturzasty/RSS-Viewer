@@ -11,11 +11,14 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 
 import pl.edu.agh.rssviewer.R;
 import pl.edu.agh.rssviewer.background.IconDownloaderTask;
 import pl.edu.agh.rssviewer.persistence.model.Feed;
+import pl.edu.agh.rssviewer.service.date.FeedDateFormatter;
 import pl.edu.agh.rssviewer.service.html.FeedParser;
 
 public class FeedAdapter extends RecyclerView.Adapter<FeedAdapter.FeedViewHolder> {
@@ -96,6 +99,13 @@ public class FeedAdapter extends RecyclerView.Adapter<FeedAdapter.FeedViewHolder
 
     public void addAll(List<Feed> data) {
         this.data.addAll(data);
+
+        Collections.sort(this.data, (o1, o2) -> {
+            Date d1 = FeedDateFormatter.getDate(o1.getDate(), o1.getType());
+            Date d2 = FeedDateFormatter.getDate(o2.getDate(), o2.getType());
+            return d2.compareTo(d1);
+        });
+
         notifyDataSetChanged();
     }
 }

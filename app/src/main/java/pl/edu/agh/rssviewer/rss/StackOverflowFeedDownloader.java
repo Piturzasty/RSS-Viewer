@@ -47,7 +47,6 @@ public class StackOverflowFeedDownloader extends FeedDownloader<StackOverflowFee
                             FeedType.StackOverflow))
                     .collect(Collectors.toList());
 
-            feedAdapter.clear();
             feedAdapter.addAll(feeds);
         }
 
