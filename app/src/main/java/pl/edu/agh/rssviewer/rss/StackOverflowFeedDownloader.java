@@ -1,5 +1,7 @@
 package pl.edu.agh.rssviewer.rss;
 
+import android.net.Uri;
+
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import java.lang.ref.WeakReference;
@@ -9,7 +11,6 @@ import java.util.stream.Collectors;
 import pl.edu.agh.rssviewer.adapter.FeedAdapter;
 import pl.edu.agh.rssviewer.persistence.model.Feed;
 import pl.edu.agh.rssviewer.persistence.repository.FeedRepository;
-import pl.edu.agh.rssviewer.rss.feed.FeedCategory;
 import pl.edu.agh.rssviewer.rss.feed.stackoverflow.StackOverflowEntry;
 import pl.edu.agh.rssviewer.rss.feed.stackoverflow.StackOverflowFeed;
 
@@ -34,11 +35,11 @@ public class StackOverflowFeedDownloader extends FeedDownloader<StackOverflowFee
 
     @Override
     protected void onPostExecute(StackOverflowFeed stackOverflowFeed) {
-        super.onPostExecute(stackOverflowFeed);
-
         FeedAdapter feedAdapter = feedAdapterWeakReference.get();
 
         if (stackOverflowFeed != null && feedAdapter != null) {
+            String category = getCategoryName(stackOverflowFeed);
+
             List<Feed> feeds = stackOverflowFeed
                     .getEntries()
                     .stream()
@@ -49,11 +50,11 @@ public class StackOverflowFeedDownloader extends FeedDownloader<StackOverflowFee
                             entry.getUpdated(),
                             entry.getSummary(),
                             entry.getAuthor().getName(),
-                            entry.getCategories().stream().map(FeedCategory::getTerm).collect(Collectors.joining(",")),
+                            category,
                             FeedType.StackOverflow))
                     .collect(Collectors.toList());
 
-            combineWithDbAndAdd(stackOverflowFeed, feedAdapter, feeds);
+            combineWithDbAndAdd(feedAdapter, feeds, category);
         }
 
         SwipeRefreshLayout swipeRefreshLayout = swipeRefreshLayoutWeakReference.get();
@@ -62,9 +63,22 @@ public class StackOverflowFeedDownloader extends FeedDownloader<StackOverflowFee
         }
     }
 
-    private void combineWithDbAndAdd(StackOverflowFeed stackOverflowFeed, FeedAdapter feedAdapter, List<Feed> feeds) {
-        List<Feed> dbFeeds = feedRepository.findByCategory(stackOverflowFeed.getEntries().get(0).getCategories().get(0).getTerm());
+    private String getCategoryName(StackOverflowFeed stackOverflowFeed) {
+        Uri feedId = Uri.parse(stackOverflowFeed.getId());
+        String category;
+        if (feedId.getPathSegments().contains("tag")) {
+            category = feedId.getQueryParameter("tagnames");
+        } else {
+            category = "general";
+        }
+        return category;
+    }
+
+    private void combineWithDbAndAdd(FeedAdapter feedAdapter, List<Feed> feeds, String category) {
+        List<Feed> dbFeeds = feedRepository.findByCategory(category);
         List<String> externalIds = dbFeeds.stream().map(Feed::getExternalId).collect(Collectors.toList());
+
+        // TODO: if database exceed 100 rows -> then sort it and delete the oldest ones
 
         List<Feed> notExistingInDb = feeds.stream().filter(f -> !externalIds.contains(f.getExternalId())).collect(Collectors.toList());
         if (notExistingInDb.size() > 0) {

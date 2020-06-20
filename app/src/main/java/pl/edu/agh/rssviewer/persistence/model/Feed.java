@@ -6,13 +6,14 @@ import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
 
 import java.io.Serializable;
+import java.util.Date;
 
 import pl.edu.agh.rssviewer.persistence.dao.FeedDaoImpl;
 import pl.edu.agh.rssviewer.rss.FeedType;
 import pl.edu.agh.rssviewer.service.date.FeedDateFormatter;
 
 @DatabaseTable(tableName = "feeds", daoClass = FeedDaoImpl.class)
-public class Feed implements Serializable {
+public class Feed implements Serializable, Comparable<Feed> {
     public static final String CATEGORY_NAME = "category";
 
     @DatabaseField(generatedId = true)
@@ -122,5 +123,12 @@ public class Feed implements Serializable {
 
     public void setType(FeedType type) {
         this.type = type;
+    }
+
+    @Override
+    public int compareTo(Feed other) {
+        Date d1 = FeedDateFormatter.getDate(date, type);
+        Date d2 = FeedDateFormatter.getDate(other.getDate(), other.getType());
+        return d2.compareTo(d1);
     }
 }
