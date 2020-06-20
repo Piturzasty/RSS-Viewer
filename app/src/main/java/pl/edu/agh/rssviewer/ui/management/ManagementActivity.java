@@ -1,6 +1,7 @@
 package pl.edu.agh.rssviewer.ui.management;
 
 import android.os.Bundle;
+import android.util.Log;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
@@ -8,7 +9,7 @@ import com.google.android.material.snackbar.Snackbar;
 import pl.edu.agh.rssviewer.ActivityBase;
 import pl.edu.agh.rssviewer.R;
 
-public class ManagementActivity extends ActivityBase {
+public class ManagementActivity extends ActivityBase implements AddFeedDialog.OnDialogInteractionListener {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -22,6 +23,11 @@ public class ManagementActivity extends ActivityBase {
             Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
                     .setAction("Action", null).show();
         });
+    }
+
+    @Override
+    public void onAddButtonClick(String uri) {
+        Log.d("MgmtActivity", uri);
     }
 }
 
