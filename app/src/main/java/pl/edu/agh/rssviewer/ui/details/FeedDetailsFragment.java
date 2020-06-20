@@ -115,9 +115,7 @@ public class FeedDetailsFragment extends Fragment {
     private void parseRedditFeedContent(Feed feed, Document document) {
         Elements elements = document.getElementsByClass("md");
         if (elements.size() == 1) { // reddit text
-            imageContainerConstraintLayout.setVisibility(View.GONE);
-            imageImageView.setImageDrawable(null);
-            contentTextView.setText(Html.fromHtml(elements.get(0).childNode(0).outerHtml(), Html.FROM_HTML_MODE_COMPACT));
+            showDefaultFormattedHtmlTextOnly(feed);
         } else {
             elements = document.getElementsByTag("img");
             if (elements.size() == 1) { // reddit image
@@ -125,15 +123,18 @@ public class FeedDetailsFragment extends Fragment {
                 contentTextView.setText(null);
                 new ImageDownloaderTask(imageImageView).execute(elements.attr("src"));
             } else { // unrecognized
-                imageContainerConstraintLayout.setVisibility(View.GONE);
-                contentTextView.setText(Html.fromHtml(feed.getContent(), Html.FROM_HTML_MODE_COMPACT));
+                showDefaultFormattedHtmlTextOnly(feed);
             }
         }
     }
 
     private void parseStackOverflowFeedContent(Feed feed) {
+        showDefaultFormattedHtmlTextOnly(feed);
+    }
+
+    private void showDefaultFormattedHtmlTextOnly(Feed feed) {
         imageContainerConstraintLayout.setVisibility(View.GONE);
         imageImageView.setImageDrawable(null);
-        contentTextView.setText(Html.fromHtml(feed.getContent(), Html.FROM_HTML_MODE_COMPACT));
+        contentTextView.setText(Html.fromHtml(feed.getContent(), Html.FROM_HTML_MODE_LEGACY));
     }
 }
