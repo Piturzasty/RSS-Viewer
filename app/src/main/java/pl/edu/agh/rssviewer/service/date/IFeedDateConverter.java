@@ -1,4 +1,4 @@
-package pl.edu.agh.rssviewer.adapter;
+package pl.edu.agh.rssviewer.service.date;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -7,7 +7,7 @@ import java.time.ZoneOffset;
 import java.util.Date;
 import java.util.Locale;
 
-public abstract class IFeedDateConverter {
+abstract class IFeedDateConverter {
 
     Date parseFromUtcString(String utcDateString) throws ParseException {
         String dateTimeFormat = "yyyy-MM-dd'T'HH:mm:ss'Z'";

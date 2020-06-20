@@ -1,9 +1,9 @@
-package pl.edu.agh.rssviewer.adapter;
+package pl.edu.agh.rssviewer.service.date;
 
 import java.text.ParseException;
 import java.util.Date;
 
-public class DefaultFeedDateConverter extends IFeedDateConverter {
+class DefaultFeedDateConverter extends IFeedDateConverter {
     @Override
     Date convertToUtc(String dateString) {
         try {

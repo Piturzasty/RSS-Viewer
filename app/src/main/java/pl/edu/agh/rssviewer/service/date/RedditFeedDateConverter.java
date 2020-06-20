@@ -1,11 +1,11 @@
-package pl.edu.agh.rssviewer.adapter;
+package pl.edu.agh.rssviewer.service.date;
 
 import java.text.ParseException;
 import java.time.OffsetDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Date;
 
-public class RedditFeedDateConverter extends IFeedDateConverter {
+class RedditFeedDateConverter extends IFeedDateConverter {
     @Override
     public Date convertToUtc(String dateString) {
         String utcString = OffsetDateTime.parse(dateString).format(DateTimeFormatter.ISO_OFFSET_DATE_TIME);

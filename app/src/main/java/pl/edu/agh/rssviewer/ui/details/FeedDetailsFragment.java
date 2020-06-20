@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.content.res.Configuration;
 import android.net.Uri;
 import android.os.Bundle;
-import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,14 +16,10 @@ import androidx.annotation.Nullable;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 
-import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document;
-import org.jsoup.select.Elements;
-
 import pl.edu.agh.rssviewer.R;
-import pl.edu.agh.rssviewer.adapter.Feed;
+import pl.edu.agh.rssviewer.rss.Feed;
 import pl.edu.agh.rssviewer.background.IconDownloaderTask;
-import pl.edu.agh.rssviewer.background.ImageDownloaderTask;
+import pl.edu.agh.rssviewer.service.html.FeedParser;
 
 public class FeedDetailsFragment extends Fragment {
     private ImageView iconImageView;
@@ -90,51 +85,12 @@ public class FeedDetailsFragment extends Fragment {
             titleTextView.setText(feed.getTitle());
         }
 
-        parseFeedContent(feed);
+        new FeedParser(contentTextView, imageImageView).parseContent(feed);
 
         StringBuilder additionalInfo = new StringBuilder("Posted by: " + feed.getAuthor());
         if (orientation == Configuration.ORIENTATION_PORTRAIT) {
             additionalInfo.append(",\n").append(feed.getFormattedDate(view.getContext()));
         }
         additionalInfoTextView.setText(additionalInfo.toString());
-    }
-
-    private void parseFeedContent(Feed feed) {
-        Document document = Jsoup.parse(feed.getContent());
-        switch (feed.getFeedType()) {
-            case Reddit: {
-                parseRedditFeedContent(feed, document);
-                break;
-            }
-            case StackOverflow:
-                parseStackOverflowFeedContent(feed);
-                break;
-        }
-    }
-
-    private void parseRedditFeedContent(Feed feed, Document document) {
-        Elements elements = document.getElementsByClass("md");
-        if (elements.size() == 1) { // reddit text
-            showDefaultFormattedHtmlTextOnly(feed);
-        } else {
-            elements = document.getElementsByTag("img");
-            if (elements.size() == 1) { // reddit image
-                contentTextView.setVisibility(View.GONE);
-                contentTextView.setText(null);
-                new ImageDownloaderTask(imageImageView).execute(elements.attr("src"));
-            } else { // unrecognized
-                showDefaultFormattedHtmlTextOnly(feed);
-            }
-        }
-    }
-
-    private void parseStackOverflowFeedContent(Feed feed) {
-        showDefaultFormattedHtmlTextOnly(feed);
-    }
-
-    private void showDefaultFormattedHtmlTextOnly(Feed feed) {
-        imageContainerConstraintLayout.setVisibility(View.GONE);
-        imageImageView.setImageDrawable(null);
-        contentTextView.setText(Html.fromHtml(feed.getContent(), Html.FROM_HTML_MODE_LEGACY));
     }
 }

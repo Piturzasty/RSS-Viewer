@@ -13,7 +13,7 @@ import java.lang.ref.WeakReference;
 import java.net.URL;
 import java.net.URLConnection;
 
-import pl.edu.agh.rssviewer.adapter.FeedType;
+import pl.edu.agh.rssviewer.rss.FeedType;
 
 public class IconDownloaderTask extends AsyncTask<FeedType, Void, Bitmap> {
     private final WeakReference<ImageView> imageViewReference;

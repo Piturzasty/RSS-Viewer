@@ -15,6 +15,8 @@ import java.util.List;
 
 import pl.edu.agh.rssviewer.background.IconDownloaderTask;
 import pl.edu.agh.rssviewer.R;
+import pl.edu.agh.rssviewer.rss.Feed;
+import pl.edu.agh.rssviewer.service.html.FeedParser;
 
 public class FeedAdapter extends RecyclerView.Adapter<FeedAdapter.FeedViewHolder> {
     private List<Feed> data;
@@ -27,7 +29,8 @@ public class FeedAdapter extends RecyclerView.Adapter<FeedAdapter.FeedViewHolder
         TextView titleTextView;
         TextView dateTextView;
         TextView contentTextView;
-        ImageView imageView;
+        ImageView iconImageView;
+        ImageView imageImageView;
 
         FeedViewHolder(View v) {
             super(v);
@@ -35,7 +38,8 @@ public class FeedAdapter extends RecyclerView.Adapter<FeedAdapter.FeedViewHolder
             titleTextView = itemView.findViewById(R.id.title);
             dateTextView = itemView.findViewById(R.id.item_date);
             contentTextView = itemView.findViewById(R.id.item_content);
-            imageView = itemView.findViewById(R.id.item_image_view);
+            iconImageView = itemView.findViewById(R.id.item_icon);
+            imageImageView = itemView.findViewById(R.id.item_image);
         }
     }
 
@@ -58,22 +62,13 @@ public class FeedAdapter extends RecyclerView.Adapter<FeedAdapter.FeedViewHolder
     public void onBindViewHolder(FeedViewHolder holder, final int position) {
         Feed feed = data.get(position);
 
-        holder.imageView.setImageDrawable(null);
-        new IconDownloaderTask(holder.imageView).execute(feed.getFeedType());
+        holder.iconImageView.setImageDrawable(null);
+        new IconDownloaderTask(holder.iconImageView).execute(feed.getFeedType());
 
         holder.titleTextView.setText(feed.getTitle());
         holder.dateTextView.setText(feed.getFormattedDate(context));
 
-        String content = feed.getContent();
-        if (content.length() > 150) {
-            int lastDot = content.substring(0, 150).lastIndexOf('.');
-            if (lastDot == -1) {
-
-            }
-            content = content.substring(0, lastDot + 1) + "..";
-        }
-
-        holder.contentTextView.setText(content);
+        new FeedParser(holder.contentTextView, holder.imageImageView, true).parseContent(feed);
 
         holder.itemView.setBackgroundColor(Color.WHITE);
         if (selectedPosition == position) {

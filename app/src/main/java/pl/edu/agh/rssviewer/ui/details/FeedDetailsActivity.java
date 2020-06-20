@@ -11,7 +11,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import pl.edu.agh.rssviewer.R;
-import pl.edu.agh.rssviewer.adapter.Feed;
+import pl.edu.agh.rssviewer.rss.Feed;
 import pl.edu.agh.rssviewer.ui.preferences.PreferencesActivity;
 
 public class FeedDetailsActivity extends AppCompatActivity {

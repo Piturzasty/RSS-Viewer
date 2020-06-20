@@ -6,9 +6,7 @@ import java.lang.ref.WeakReference;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import pl.edu.agh.rssviewer.adapter.Feed;
 import pl.edu.agh.rssviewer.adapter.FeedAdapter;
-import pl.edu.agh.rssviewer.adapter.FeedType;
 import pl.edu.agh.rssviewer.rss.feed.reddit.RedditEntry;
 import pl.edu.agh.rssviewer.rss.feed.reddit.RedditFeed;
 

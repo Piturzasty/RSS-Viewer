@@ -1,8 +1,10 @@
-package pl.edu.agh.rssviewer.adapter;
+package pl.edu.agh.rssviewer.rss;
 
 import android.content.Context;
 
 import java.io.Serializable;
+
+import pl.edu.agh.rssviewer.service.date.FeedDateFormatter;
 
 public class Feed implements Serializable {
     private String title;

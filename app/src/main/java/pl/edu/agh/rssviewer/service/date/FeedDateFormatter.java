@@ -1,9 +1,11 @@
-package pl.edu.agh.rssviewer.adapter;
+package pl.edu.agh.rssviewer.service.date;
 
 import android.content.Context;
 
 import java.text.DateFormat;
 import java.util.Date;
+
+import pl.edu.agh.rssviewer.rss.FeedType;
 
 public class FeedDateFormatter {
     private static IFeedDateConverter redditDateFeedConverter;
