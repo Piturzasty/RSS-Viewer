@@ -40,7 +40,7 @@ public class RedditFeedDownloader extends FeedDownloader<RedditFeed> {
                     .getEntries()
                     .stream()
                     .map((RedditEntry entry) -> new Feed(
-                            entry.getId(),
+                            entry.getTitle(),
                             entry.getContent(),
                             entry.getUpdated(),
                             entry.getAuthor().getName(),

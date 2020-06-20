@@ -51,12 +51,10 @@ dependencies {
     compileOnly 'javax.annotation:jsr250-api:1.0'
     implementation 'javax.inject:javax.inject:1'
 
-    def preference_version = "1.1.1"
+    implementation "androidx.preference:preference:1.1.1"
 
-    // Java language implementation
-    implementation "androidx.preference:preference:$preference_version"
-    // Kotlin
-    implementation "androidx.preference:preference-ktx:$preference_version"
+    // https://mvnrepository.com/artifact/org.jsoup/jsoup
+    implementation group: 'org.jsoup', name: 'jsoup', version: '1.13.1'
 
     implementation "androidx.swiperefreshlayout:swiperefreshlayout:1.0.0"
     implementation 'com.google.android.material:material:1.1.0'

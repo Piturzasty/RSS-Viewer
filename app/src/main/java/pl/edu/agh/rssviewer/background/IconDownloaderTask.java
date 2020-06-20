@@ -13,10 +13,10 @@ import java.lang.ref.WeakReference;
 import java.net.URL;
 import java.net.URLConnection;
 
-public class ImageDownloaderTask extends AsyncTask<String, Void, Bitmap> {
+public class IconDownloaderTask extends AsyncTask<String, Void, Bitmap> {
     private final WeakReference<ImageView> imageViewReference;
 
-    public ImageDownloaderTask(ImageView imageView) {
+    public IconDownloaderTask(ImageView imageView) {
         imageViewReference = new WeakReference<>(imageView);
     }
 
@@ -34,8 +34,7 @@ public class ImageDownloaderTask extends AsyncTask<String, Void, Bitmap> {
         ImageView imageView = imageViewReference.get();
         if (imageView != null) {
             if (bitmap != null) {
-                Bitmap upScaledBitmap = Bitmap.createScaledBitmap(bitmap, 1024, 1024, true);
-                imageView.setImageBitmap(upScaledBitmap);
+                imageView.setImageBitmap(bitmap);
             } else {
                 imageView.setImageDrawable(null);
             }
@@ -43,11 +42,11 @@ public class ImageDownloaderTask extends AsyncTask<String, Void, Bitmap> {
     }
 
     private Bitmap downloadBitmap(String url) {
-        final Uri imageUri = Uri.parse(url);
+        final Uri iconUri = Uri.parse(url).buildUpon().path("favicon.ico").build();
 
         try
         {
-            URLConnection conn = new URL(imageUri.toString()).openConnection();
+            URLConnection conn = new URL(iconUri.toString()).openConnection();
             conn.connect();
             InputStream is = conn.getInputStream();
             BufferedInputStream bis = new BufferedInputStream(is, 8192);

@@ -82,13 +82,14 @@ public class FeedListFragment extends Fragment {
             }
         }));
 
+        new RedditFeedDownloader(feedAdapter, swipeRefreshLayout).execute("https://www.reddit.com/r/beta/.rss");
+
         swipeRefreshLayout = view.findViewById(R.id.swipe_refresh);
         swipeRefreshLayout.setOnRefreshListener(() -> new RedditFeedDownloader(feedAdapter, swipeRefreshLayout).execute("https://www.reddit.com/r/WTF/.rss"));
         swipeRefreshLayout.setColorSchemeResources(android.R.color.holo_red_light, android.R.color.holo_green_light, android.R.color.holo_orange_light, android.R.color.holo_red_light);
 
         return view;
     }
-
 
     @Override
     public void onAttach(@NonNull Context context) {

@@ -13,7 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.List;
 
-import pl.edu.agh.rssviewer.background.ImageDownloaderTask;
+import pl.edu.agh.rssviewer.background.IconDownloaderTask;
 import pl.edu.agh.rssviewer.R;
 
 public class FeedAdapter extends RecyclerView.Adapter<FeedAdapter.FeedViewHolder> {
@@ -58,7 +58,7 @@ public class FeedAdapter extends RecyclerView.Adapter<FeedAdapter.FeedViewHolder
     public void onBindViewHolder(FeedViewHolder holder, final int position) {
         Feed feed = data.get(position);
 
-        new ImageDownloaderTask(holder.imageView).execute("https://www.reddit.com/");
+        new IconDownloaderTask(holder.imageView).execute("https://www.reddit.com/");
 
         holder.titleTextView.setText(feed.getTitle());
         holder.dateTextView.setText(feed.getFormattedDate(context));
