@@ -27,7 +27,6 @@ import pl.edu.agh.rssviewer.listeners.RecyclerItemClickListener;
 import pl.edu.agh.rssviewer.persistence.model.Feed;
 import pl.edu.agh.rssviewer.persistence.repository.FeedRepository;
 import pl.edu.agh.rssviewer.persistence.repository.FeedSourceRepository;
-import pl.edu.agh.rssviewer.rss.RedditFeedDownloader;
 
 public class FeedListFragment extends DaggerFragment {
 
@@ -39,7 +38,6 @@ public class FeedListFragment extends DaggerFragment {
 
     @Inject
     FeedSourceRepository feedSourceRepository;
-
     @Inject
     FeedRepository feedRepository;
 
@@ -61,7 +59,7 @@ public class FeedListFragment extends DaggerFragment {
 
         new FeedDownloaderTask(feedAdapter, swipeRefreshLayout, feedRepository, feedSourceRepository).execute();
 
-        swipeRefreshLayout.setOnRefreshListener(() -> new RedditFeedDownloader(feedAdapter, swipeRefreshLayout, feedRepository).execute("https://www.reddit.com/r/WTF/.rss"));
+        swipeRefreshLayout.setOnRefreshListener(() -> new FeedDownloaderTask(feedAdapter, swipeRefreshLayout, feedRepository, feedSourceRepository).execute());
         swipeRefreshLayout.setColorSchemeResources(android.R.color.holo_red_light, android.R.color.holo_green_light, android.R.color.holo_orange_light, android.R.color.holo_red_light);
 
         return view;

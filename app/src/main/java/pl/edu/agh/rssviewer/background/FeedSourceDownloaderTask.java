@@ -34,6 +34,7 @@ public class FeedSourceDownloaderTask extends AsyncTask<Void, Void, List<FeedSou
     protected void onPostExecute(List<FeedSource> feedSources) {
         FeedSourceAdapter feedAdapter = feedAdapterWeakReference.get();
         if (feedAdapter != null) {
+            feedAdapter.clear();
             feedAdapter.addAll(feedSources);
         }
     }

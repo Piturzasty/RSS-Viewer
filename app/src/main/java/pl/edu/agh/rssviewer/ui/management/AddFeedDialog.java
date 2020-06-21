@@ -56,6 +56,6 @@ public class AddFeedDialog extends DialogFragment {
     }
 
     public interface OnDialogInteractionListener {
-        void onAddButtonClick(String uri);
+        void onAddButtonClick(String url);
     }
 }

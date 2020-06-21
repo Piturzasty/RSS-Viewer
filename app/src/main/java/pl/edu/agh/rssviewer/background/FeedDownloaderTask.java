@@ -43,8 +43,10 @@ public class FeedDownloaderTask extends AsyncTask<Void, Void, List<FeedSource>> 
                 switch (feedSource.getType()) {
                     case Reddit:
                         new RedditFeedDownloader(feedAdapter, swipeRefreshLayout, feedRepository).execute(feedSource.getUrl());
+                        break;
                     case StackOverflow:
                         new StackOverflowFeedDownloader(feedAdapter, swipeRefreshLayout, feedRepository).execute(feedSource.getUrl());
+                        break;
                 }
             }
         }

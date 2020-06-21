@@ -8,6 +8,8 @@ import pl.edu.agh.rssviewer.rss.FeedType;
 
 @DatabaseTable(tableName = "feedSources", daoClass = FeedSourceDaoImpl.class)
 public class FeedSource {
+    public static final String URL_NAME = "url";
+
     @DatabaseField(generatedId = true)
     private long id;
     @DatabaseField(canBeNull = false)

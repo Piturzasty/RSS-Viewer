@@ -23,7 +23,7 @@ public class FeedAdapter extends RecyclerView.Adapter<FeedAdapter.FeedViewHolder
     private List<Feed> data;
     private Context context;
 
-    private int selectedPosition;
+    private int selectedPosition = -1;
 
     static class FeedViewHolder extends RecyclerView.ViewHolder {
         View view;
@@ -46,7 +46,6 @@ public class FeedAdapter extends RecyclerView.Adapter<FeedAdapter.FeedViewHolder
 
     public FeedAdapter(List<Feed> data) {
         this.data = data;
-        this.selectedPosition = -1;
     }
 
     @NonNull
