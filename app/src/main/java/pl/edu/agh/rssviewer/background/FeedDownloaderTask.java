@@ -19,12 +19,19 @@ public class FeedDownloaderTask extends AsyncTask<Void, Void, List<FeedSource>> 
     private final WeakReference<SwipeRefreshLayout> swipeRefreshLayoutWeakReference;
     private FeedRepository feedRepository;
     private FeedSourceRepository feedSourceRepository;
+    private boolean isExclusiveDb;
+
+    public FeedDownloaderTask(FeedRepository feedRepository, FeedSourceRepository feedSourceRepository) {
+        this(null, null, feedRepository, feedSourceRepository);
+        isExclusiveDb = true;
+    }
 
     public FeedDownloaderTask(FeedAdapter feedAdapter, SwipeRefreshLayout swipeRefreshLayout, FeedRepository feedRepository, FeedSourceRepository feedSourceRepository) {
         feedAdapterWeakReference = new WeakReference<>(feedAdapter);
         swipeRefreshLayoutWeakReference = new WeakReference<>(swipeRefreshLayout);
         this.feedRepository = feedRepository;
         this.feedSourceRepository = feedSourceRepository;
+        isExclusiveDb = false;
     }
 
     @Override
@@ -34,20 +41,35 @@ public class FeedDownloaderTask extends AsyncTask<Void, Void, List<FeedSource>> 
 
     @Override
     protected void onPostExecute(List<FeedSource> feedSources) {
+        if (isExclusiveDb) {
+            processFeedSources(feedSources, null, null);
+        }
+
         FeedAdapter feedAdapter = feedAdapterWeakReference.get();
         SwipeRefreshLayout swipeRefreshLayout = swipeRefreshLayoutWeakReference.get();
-
         if (feedAdapter != null && swipeRefreshLayout != null) {
             feedAdapter.clear();
-            for (FeedSource feedSource : feedSources) {
-                switch (feedSource.getType()) {
-                    case Reddit:
-                        new RedditFeedDownloader(feedAdapter, swipeRefreshLayout, feedRepository).execute(feedSource.getUrl());
-                        break;
-                    case StackOverflow:
-                        new StackOverflowFeedDownloader(feedAdapter, swipeRefreshLayout, feedRepository).execute(feedSource.getUrl());
-                        break;
-                }
+            processFeedSources(feedSources, feedAdapter, swipeRefreshLayout);
+        }
+    }
+
+    private void processFeedSources(List<FeedSource> feedSources, FeedAdapter feedAdapter, SwipeRefreshLayout swipeRefreshLayout) {
+        for (FeedSource feedSource : feedSources) {
+            switch (feedSource.getType()) {
+                case Reddit:
+                    RedditFeedDownloader redditFeedDownloader = new RedditFeedDownloader(feedAdapter, swipeRefreshLayout, feedRepository);
+                    if (isExclusiveDb) {
+                        redditFeedDownloader.exclusiveDb();
+                    }
+                    redditFeedDownloader.execute(feedSource.getUrl());
+                    break;
+                case StackOverflow:
+                    StackOverflowFeedDownloader stackOverflowFeedDownloader = new StackOverflowFeedDownloader(feedAdapter, swipeRefreshLayout, feedRepository);
+                    if (isExclusiveDb) {
+                        stackOverflowFeedDownloader.exclusiveDb();
+                    }
+                    stackOverflowFeedDownloader.execute(feedSource.getUrl());
+                    break;
             }
         }
     }

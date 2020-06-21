@@ -16,11 +16,17 @@ public class RedditFeedDownloader extends FeedDownloader<RedditFeed> {
     private WeakReference<FeedAdapter> feedAdapterWeakReference;
     private WeakReference<SwipeRefreshLayout> swipeRefreshLayoutWeakReference;
     private FeedRepository feedRepository;
+    private boolean isExclusiveDb;
 
     public RedditFeedDownloader(FeedAdapter feedAdapter, SwipeRefreshLayout swipeRefreshLayout, FeedRepository feedRepository) {
         feedAdapterWeakReference = new WeakReference<>(feedAdapter);
         swipeRefreshLayoutWeakReference = new WeakReference<>(swipeRefreshLayout);
         this.feedRepository = feedRepository;
+        isExclusiveDb = false;
+    }
+
+    public void exclusiveDb() {
+        isExclusiveDb = true;
     }
 
     @Override
@@ -33,22 +39,14 @@ public class RedditFeedDownloader extends FeedDownloader<RedditFeed> {
 
     @Override
     protected void onPostExecute(RedditFeed redditFeed) {
+        if (redditFeed != null && isExclusiveDb) {
+            addFeedsToDbAndGetAll(redditFeed, mapFeeds(redditFeed));
+            return;
+        }
+
         FeedAdapter feedAdapter = feedAdapterWeakReference.get();
         if (redditFeed != null && feedAdapter != null) {
-            List<Feed> feeds = redditFeed
-                    .getEntries()
-                    .stream()
-                    .map((RedditEntry entry) -> new Feed(
-                            entry.getId(),
-                            entry.getLink().getHref(),
-                            entry.getTitle(),
-                            entry.getUpdated(),
-                            entry.getContent(),
-                            entry.getAuthor().getName(),
-                            redditFeed.getCategory().getTerm(),
-                            FeedType.Reddit))
-                    .collect(Collectors.toList());
-
+            List<Feed> feeds = mapFeeds(redditFeed);
             combineWithDbAndAdd(redditFeed, feedAdapter, feeds);
         }
 
@@ -58,7 +56,28 @@ public class RedditFeedDownloader extends FeedDownloader<RedditFeed> {
         }
     }
 
+    private List<Feed> mapFeeds(RedditFeed redditFeed) {
+        return redditFeed
+                .getEntries()
+                .stream()
+                .map((RedditEntry entry) -> new Feed(
+                        entry.getId(),
+                        entry.getLink().getHref(),
+                        entry.getTitle(),
+                        entry.getUpdated(),
+                        entry.getContent(),
+                        entry.getAuthor().getName(),
+                        redditFeed.getCategory().getTerm(),
+                        FeedType.Reddit))
+                .collect(Collectors.toList());
+    }
+
     private void combineWithDbAndAdd(RedditFeed redditFeed, FeedAdapter feedAdapter, List<Feed> feeds) {
+        List<Feed> finalFeeds = addFeedsToDbAndGetAll(redditFeed, feeds);
+        feedAdapter.addAll(finalFeeds);
+    }
+
+    private List<Feed> addFeedsToDbAndGetAll(RedditFeed redditFeed, List<Feed> feeds) {
         List<Feed> dbFeeds = feedRepository.findByCategory(redditFeed.getCategory().getTerm());
         List<String> externalIds = dbFeeds.stream().map(Feed::getExternalId).collect(Collectors.toList());
 
@@ -68,8 +87,7 @@ public class RedditFeedDownloader extends FeedDownloader<RedditFeed> {
         }
 
         dbFeeds.addAll(notExistingInDb);
-
-        feedAdapter.addAll(dbFeeds);
+        return dbFeeds;
     }
 }
 

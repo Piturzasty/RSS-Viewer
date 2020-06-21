@@ -3,12 +3,14 @@ package pl.edu.agh.rssviewer.receiver;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.ConnectivityManager.NetworkCallback;
 import android.net.Network;
 import android.view.View;
 
 import androidx.annotation.NonNull;
+import androidx.preference.PreferenceManager;
 
 import com.google.android.material.snackbar.Snackbar;
 
@@ -20,7 +22,7 @@ public class NetworkChangedBroadcastReceiver extends BroadcastReceiver {
 
         ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
         assert cm != null;
-        cm.registerDefaultNetworkCallback(new NetworkChangedCallback(view));
+        cm.registerDefaultNetworkCallback(new NetworkChangedCallback(context, view));
     }
 
     @Override
@@ -28,9 +30,11 @@ public class NetworkChangedBroadcastReceiver extends BroadcastReceiver {
     }
 
     private class NetworkChangedCallback extends NetworkCallback {
-        View view;
+        private Context context;
+        private View view;
 
-        NetworkChangedCallback(View view) {
+        NetworkChangedCallback(Context context, View view) {
+            this.context = context;
             this.view = view;
         }
 
@@ -38,14 +42,22 @@ public class NetworkChangedBroadcastReceiver extends BroadcastReceiver {
         public void onAvailable(@NonNull Network network) {
             super.onAvailable(network);
 
-            Snackbar.make(view, "Network is available", 3000).show();
+            SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
+            boolean allowInternetCheck = sharedPreferences.getBoolean("allow_internet_check", false);
+            if (allowInternetCheck) {
+                Snackbar.make(view, "You are online", 3000).show();
+            }
         }
 
         @Override
         public void onLost(@NonNull Network network) {
             super.onLost(network);
 
-            Snackbar.make(view, "Network is unavailable", 3000).show();
+            SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
+            boolean allowInternetCheck = sharedPreferences.getBoolean("allow_internet_check", false);
+            if (allowInternetCheck) {
+                Snackbar.make(view, "You are offline", 3000).show();
+            }
         }
     }
 }

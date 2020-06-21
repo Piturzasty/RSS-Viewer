@@ -16,20 +16,15 @@ import androidx.fragment.app.FragmentTransaction;
 
 import java.util.Calendar;
 
-import javax.inject.Inject;
-
 import pl.edu.agh.rssviewer.persistence.model.Feed;
-import pl.edu.agh.rssviewer.persistence.repository.FeedRepository;
 import pl.edu.agh.rssviewer.receiver.NetworkChangedBroadcastReceiver;
+import pl.edu.agh.rssviewer.receiver.RefreshedBroadcastReceiver;
 import pl.edu.agh.rssviewer.ui.details.FeedDetailsActivity;
 import pl.edu.agh.rssviewer.ui.details.FeedDetailsFragment;
 import pl.edu.agh.rssviewer.ui.main.FeedListFragment;
 
 public class MainActivity extends ActivityBase implements FeedListFragment.OnListFragmentInteractionListener {
     BroadcastReceiver broadcastReceiver;
-
-    @Inject
-    protected FeedRepository feedRepository;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,17 +64,17 @@ public class MainActivity extends ActivityBase implements FeedListFragment.OnLis
 
     private void setupRepeatedBroadcastReceiver() {
         AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
-        Intent intent = new Intent(this, RefresherBroadcastReceiver.class);
+        Intent intent = new Intent(this, RefreshedBroadcastReceiver.class);
         PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
         Calendar calendar = Calendar.getInstance();
-        calendar.add(Calendar.HOUR, Calendar.HOUR);
+        calendar.add(Calendar.HOUR, 1);
         assert alarmManager != null;
-        alarmManager.setInexactRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), 60 * 1000, pendingIntent);
+        alarmManager.setInexactRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), AlarmManager.INTERVAL_HOUR, pendingIntent);
     }
 
     private void createNotificationChannel() {
-        int importance = NotificationManager.IMPORTANCE_DEFAULT;
-        NotificationChannel channel = new NotificationChannel("pl.edu.agh.rssviewer.ANDROID", "pl.edu.agh.rssviewer.ANDROID", importance);
+        int importance = NotificationManager.IMPORTANCE_HIGH;
+        NotificationChannel channel = new NotificationChannel("pl.edu.agh.rssviewer.REFRESH", "pl.edu.agh.rssviewer.REFRESH", importance);
         channel.setDescription("Channel for notification about new feeds");
         NotificationManager notificationManager = getSystemService(NotificationManager.class);
         assert notificationManager != null;

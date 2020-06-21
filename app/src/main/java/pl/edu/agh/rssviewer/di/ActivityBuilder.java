@@ -3,6 +3,7 @@ package pl.edu.agh.rssviewer.di;
 import dagger.Module;
 import dagger.android.ContributesAndroidInjector;
 import pl.edu.agh.rssviewer.MainActivity;
+import pl.edu.agh.rssviewer.receiver.RefreshedBroadcastReceiver;
 import pl.edu.agh.rssviewer.ui.main.FeedListFragment;
 import pl.edu.agh.rssviewer.ui.management.ManagementActivity;
 import pl.edu.agh.rssviewer.ui.details.FeedDetailsActivity;
@@ -25,4 +26,7 @@ abstract class ActivityBuilder {
 
     @ContributesAndroidInjector(modules = { DatabaseModule.class })
     abstract FeedListFragment bindFeedListFragment();
+
+    @ContributesAndroidInjector(modules = { DatabaseModule.class })
+    abstract RefreshedBroadcastReceiver bindRefreshedBroadcastReceiver();
 }
