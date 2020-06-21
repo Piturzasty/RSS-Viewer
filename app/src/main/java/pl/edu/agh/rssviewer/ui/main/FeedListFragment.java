@@ -78,7 +78,7 @@ public class FeedListFragment extends DaggerFragment {
         dividerItemDecoration.setDrawable(Objects.requireNonNull(context.getDrawable(R.drawable.divider)));
         recyclerView.addItemDecoration(dividerItemDecoration);
 
-        recyclerView.addOnItemTouchListener(new RecyclerItemClickListener(context, position -> {
+        recyclerView.addOnItemTouchListener(new RecyclerItemClickListener(position -> {
             int orientation = getResources().getConfiguration().orientation;
             if (orientation == Configuration.ORIENTATION_LANDSCAPE) {
                 feedAdapter.setSelectedPosition(position);
